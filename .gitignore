@@ -20,11 +20,7 @@
 *.jsonl.gz
 
 # Ignore model checkpoints and weights
-/models/
-/checkpoints/
-/saved_models/
-/artifacts/
-/weights/
+
 /runs/
 /experiments/
 /output/
@@ -54,11 +50,7 @@
 
 # Large files and archives (project-specific)
 # Model directories and checkpoints (already some present above)
-demo_models/
-models/
-saved_models/
-training/
-checkpoints/
+
 
 # Prediction / output / temporary folders
 prediction/
