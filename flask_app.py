@@ -386,4 +386,4 @@ def export_pdf():
     return send_file(pdf_io, as_attachment=True, download_name=filename, mimetype='application/pdf')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=1000, debug=True)
+    app.run(host='0.0.0.0', port=10000, debug=True)
