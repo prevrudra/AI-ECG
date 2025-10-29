@@ -49,7 +49,7 @@ class ModelSaver:
     def load_model(self, filepath, model=None, device=None):
         """Load model from file"""
         if device is None:
-            device = torch.device('cuda' if torch.cuda.is_available() else 'mps')
+            device = torch.device('mps' if torch.mps.is_available() else 'cpu')
         
         print(f"Loading model from: {filepath}")
         
@@ -164,7 +164,7 @@ class ModelEvaluator:
     
     def __init__(self, model, device=None):
         self.model = model
-        self.device = device if device else torch.device('cuda' if torch.cuda.is_available() else 'mps')
+        self.device = device if device else torch.device('mps' if torch.mps.is_available() else 'cpu')
     
     def evaluate_metrics(self, data_loader, class_names=None):
         """Evaluate model and return comprehensive metrics"""

@@ -133,11 +133,11 @@ def demo_system_info():
         print(f"🔥 PyTorch: {torch.__version__}")
         print(f"📊 NumPy: {np.__version__}")
         print(f"📈 Pandas: {torch.__version__}")
-        print(f"🤖 CUDA: {'✅ Available' if torch.cuda.is_available() else '❌ Not available'}")
+        print(f"🤖 mps: {'✅ Available' if torch.mps.is_available() else '❌ Not available'}")
         
-        if torch.cuda.is_available():
-            print(f"   🎮 GPU: {torch.cuda.get_device_name(0)}")
-            print(f"   🎮 Memory: {torch.cuda.get_device_properties(0).total_memory / 1e9:.1f} GB")
+        if torch.mps.is_available():
+            print(f"   🎮 GPU: {torch.mps.get_device_name(0)}")
+            print(f"   🎮 Memory: {torch.mps.get_device_properties(0).total_memory / 1e9:.1f} GB")
         
         return True
         

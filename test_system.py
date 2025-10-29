@@ -143,11 +143,11 @@ def test_system_info():
         print(f"✅ NumPy version: {np.__version__}")
         print(f"✅ Pandas version: {pd.__version__}")
         print(f"✅ Scikit-learn version: {sklearn.__version__}")
-        print(f"✅ CUDA available: {torch.cuda.is_available()}")
+        print(f"✅ mps available: {torch.mps.is_available()}")
         
-        if torch.cuda.is_available():
-            print(f"✅ GPU count: {torch.cuda.device_count()}")
-            print(f"✅ GPU name: {torch.cuda.get_device_name(0)}")
+        if torch.mps.is_available():
+            print(f"✅ GPU count: {torch.mps.device_count()}")
+            print(f"✅ GPU name: {torch.mps.get_device_name(0)}")
         
         return True
         

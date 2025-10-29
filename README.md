@@ -206,7 +206,7 @@ for model in models:
 ### Common Issues
 
 1. **Memory Error**: Reduce batch size or use smaller model
-2. **CUDA Error**: Ensure PyTorch CUDA installation matches your GPU
+2. **mps Error**: Ensure PyTorch mps installation matches your GPU
 3. **Data Loading Error**: Check DATA directory structure and file permissions
 4. **Model Loading Error**: Ensure model file is not corrupted
 

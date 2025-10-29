@@ -100,7 +100,7 @@ class ECGAITrainer:
     def __init__(self, data_path='./DATA/', sampling_rate=100, device=None):
         self.data_path = data_path
         self.sampling_rate = sampling_rate
-        self.device = device if device else torch.device('cuda' if torch.cuda.is_available() else 'mps')
+        self.device = device if device else torch.device('mps' if torch.mps.is_available() else 'cpu')
         self.model = None
         self.label_encoder = None
         self.scaler = None

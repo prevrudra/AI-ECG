@@ -288,7 +288,7 @@ def predict():
             flash(f"Error reading WFDB files: {e}")
             return redirect(url_for('index'))
         arr = signal.T
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        device = torch.device('mps' if torch.mps.is_available() else 'cpu')
         model, class_names, input_length = load_model(model_path, device)
         try:
             arr = preprocess_signal(arr, input_length)
@@ -386,4 +386,4 @@ def export_pdf():
     return send_file(pdf_io, as_attachment=True, download_name=filename, mimetype='application/pdf')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=50012, debug=True)
+    app.run(host='0.0.0.0', port=1000, debug=True)

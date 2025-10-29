@@ -27,12 +27,12 @@ class ECGTrainer:
     
     def __init__(self, model_type='cnn', device=None, save_dir='./saved_models/'):
         self.model_type = model_type
-        # Prefer CUDA, then MPS on Apple Silicon, else CPU
+        # Prefer mps, then MPS on Apple Silicon, else CPU
         if device is not None:
             self.device = device
         else:
-            if torch.cuda.is_available():
-                self.device = torch.device('cuda')
+            if torch.mps.is_available():
+                self.device = torch.device('mps')
             elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
                 self.device = torch.device('mps')
             else:
