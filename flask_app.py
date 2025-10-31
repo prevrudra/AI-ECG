@@ -214,6 +214,14 @@ def predict():
     notes = request.form.get('notes', '').strip()
     model_name = request.form['model_name']
     model_path = os.path.join(MODEL_FOLDER, model_name)
+
+    # Debug: log incoming form and uploaded files presence
+    try:
+        print(f"PREDICT: received form keys={list(request.form.keys())}", flush=True)
+        print(f"PREDICT: files keys={list(request.files.keys())}", flush=True)
+    except Exception:
+        print('PREDICT: cannot read request metadata', flush=True)
+
     # Only handle manual uploads of .hea + .dat for either 100 Hz or 500 Hz
     hea_100 = request.files.get('hea_100')
     dat_100 = request.files.get('dat_100')
@@ -222,14 +230,63 @@ def predict():
     record_file = None
     freq_name = None
 
-    # Helper: check present, named & non-empty
+    # Debug print file info without consuming streams
+    def _file_info(f):
+        if not f:
+            return None
+        name = getattr(f, 'filename', None)
+        size = getattr(f, 'content_length', None)
+        try:
+            # try to peek one byte non-destructively
+            stream = getattr(f, 'stream', None)
+            pos = None
+            if stream:
+                try:
+                    pos = stream.tell()
+                except Exception:
+                    pos = None
+                try:
+                    chunk = stream.read(1)
+                    has = bool(chunk)
+                except Exception:
+                    has = None
+                if pos is not None:
+                    try:
+                        stream.seek(pos)
+                    except Exception:
+                        pass
+            else:
+                has = None
+        except Exception:
+            has = None
+        return {'filename': name, 'content_length': size, 'has_bytes': has}
+
+    print('PREDICT: hea_100=', _file_info(hea_100), ' dat_100=', _file_info(dat_100), flush=True)
+    print('PREDICT: hea_500=', _file_info(hea_500), ' dat_500=', _file_info(dat_500), flush=True)
+
+    # Helper: check present, named & non-empty (keeps previous behavior)
     def file_valid(f):
-        return f and f.filename and f.filename.strip() and f.stream and f.filename != 'None' and len(f.read()) > 0
-    # After read(), must seek(0) before use
-    if hea_100: hea_100.seek(0)
-    if dat_100: dat_100.seek(0)
-    if hea_500: hea_500.seek(0)
-    if dat_500: dat_500.seek(0)
+        try:
+            return f and f.filename and f.filename.strip() and f.stream and f.filename != 'None' and len(f.read()) > 0
+        finally:
+            try:
+                if f and getattr(f, 'stream', None):
+                    f.stream.seek(0)
+            except Exception:
+                pass
+    # After read(), ensure seek(0) before use
+    if hea_100 and getattr(hea_100, 'stream', None):
+        try: hea_100.stream.seek(0)
+        except Exception: pass
+    if dat_100 and getattr(dat_100, 'stream', None):
+        try: dat_100.stream.seek(0)
+        except Exception: pass
+    if hea_500 and getattr(hea_500, 'stream', None):
+        try: hea_500.stream.seek(0)
+        except Exception: pass
+    if dat_500 and getattr(dat_500, 'stream', None):
+        try: dat_500.stream.seek(0)
+        except Exception: pass
 
     # Use the first valid upload present (100Hz then 500Hz)
     match100 = file_valid(hea_100) and file_valid(dat_100)
